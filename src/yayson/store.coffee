@@ -80,7 +80,7 @@ module.exports = (utils) ->
         records = @findRecords type
         records.map remove
 
-    sync: (body) ->
+    sync: (body, customModelsToReturn = null) ->
       sync = (data) =>
         return null unless data?
         add = (obj) =>
@@ -98,6 +98,9 @@ module.exports = (utils) ->
       sync body.included
       recs = sync body.data
 
+      if customModelsToReturn
+        return @reSync(customModelsToReturn)
+
       return null unless recs?
 
       models = {}
@@ -107,12 +110,12 @@ module.exports = (utils) ->
       else
         @toModel recs, recs.type, models
 
-  reSync: (models) ->
-    if models instanceof Array
-      models.map (model) =>
-        @find(model.type, model.id)
-    else
-      @find(models.type, models.id)
+    reSync: (models) ->
+      if models instanceof Array
+        models.map (model) =>
+          @find(model.type, model.id)
+      else
+        @find(models.type, models.id)
 
 
 
