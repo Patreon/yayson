@@ -107,6 +107,15 @@ module.exports = (utils) ->
       else
         @toModel recs, recs.type, models
 
+  reSync: (models) ->
+    if models instanceof Array
+      models.map (model) =>
+        @find(model.type, model.id)
+    else
+      @find(models.type, models.id)
+
+
+
 
 
 
